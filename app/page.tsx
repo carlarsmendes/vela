@@ -6,7 +6,7 @@ import { SurfaceCard } from "@/components/surface-card";
 const featurePoints = [
   "Set your average cycle length during onboarding.",
   "Log body metrics and period start dates in one place.",
-  "Grow into trends, predictions, and guidance over time.",
+  "Build toward useful timing patterns and light training guidance.",
 ];
 
 export default function HomePage() {
@@ -21,8 +21,8 @@ export default function HomePage() {
       <SurfaceCard className="space-y-5">
         <div className="space-y-3">
           <p className="text-base leading-7 text-stone">
-            This first version focuses on a clean foundation for onboarding, tracking, and future
-            guidance without adding noise.
+            V1 focuses on a calm starting point for onboarding, body metrics, and cycle tracking
+            without adding clutter too early.
           </p>
           <ul className="space-y-3 text-sm leading-6 text-stone">
             {featurePoints.map((point) => (
@@ -42,11 +42,25 @@ export default function HomePage() {
           </Link>
           <Link
             className="inline-flex items-center justify-center rounded-full border border-line bg-white px-5 py-3 text-sm font-medium text-ink transition hover:bg-rosewater"
+            href="/login"
+          >
+            Log in
+          </Link>
+          <Link
+            className="inline-flex items-center justify-center rounded-full border border-line bg-white px-5 py-3 text-sm font-medium text-ink transition hover:bg-rosewater"
             href="/onboarding"
           >
             Preview onboarding
           </Link>
         </div>
+      </SurfaceCard>
+
+      <SurfaceCard className="space-y-2">
+        <p className="text-sm font-medium uppercase tracking-[0.18em] text-pine">Body metrics</p>
+        <p className="text-sm leading-6 text-stone">
+          Weight, waist, hips, bust or chest, thigh, arm, neck, body fat %, and an optional note
+          are part of the V1 direction.
+        </p>
       </SurfaceCard>
     </div>
   );

@@ -1,5 +1,5 @@
-import Link from "next/link";
-
+import { signupAction } from "@/app/auth-actions";
+import { AuthForm } from "@/components/auth-form";
 import { PageHeader } from "@/components/page-header";
 import { SurfaceCard } from "@/components/surface-card";
 
@@ -9,19 +9,17 @@ export default function SignupPage() {
       <PageHeader
         eyebrow="Account"
         title="Sign up"
-        description="Account creation will start here once authentication is wired in."
+        description="Create your account first, then continue into onboarding."
       />
 
-      <SurfaceCard className="space-y-4">
-        <p className="text-sm leading-6 text-stone">
-          For now, this route is a clean placeholder so the initial app flow is already mapped.
-        </p>
-        <Link
-          className="inline-flex items-center justify-center rounded-full border border-line px-4 py-2 text-sm font-medium transition hover:bg-rosewater"
-          href="/login"
-        >
-          Already have an account?
-        </Link>
+      <SurfaceCard>
+        <AuthForm
+          action={signupAction}
+          alternateHref="/login"
+          alternateLabel="Already have an account?"
+          description="This starts the email/password flow. Confirmation still depends on your Supabase project settings."
+          mode="signup"
+        />
       </SurfaceCard>
     </div>
   );

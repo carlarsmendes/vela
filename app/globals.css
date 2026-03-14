@@ -17,6 +17,8 @@ body {
     linear-gradient(180deg, #fbf9f7 0%, #f7f1eb 100%);
   color: #1f1a17;
   font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 a {
@@ -30,6 +32,13 @@ a {
 
 input::placeholder {
   color: #9c928c;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
 }
 
 ::selection {

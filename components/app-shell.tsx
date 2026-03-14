@@ -11,11 +11,16 @@ export function AppShell({ children }: AppShellProps) {
   return (
     <div className="min-h-screen bg-mist text-ink">
       <div className="mx-auto flex min-h-screen max-w-app flex-col px-5 pb-12 pt-6 sm:px-6">
-        <header className="mb-8 flex items-center justify-between">
-          <Link className="text-lg font-semibold tracking-tight" href="/">
-            Vela
-          </Link>
-          <nav aria-label="Primary" className="flex items-center gap-3 text-sm text-stone">
+        <header className="mb-8 space-y-4">
+          <div className="flex items-center justify-between gap-4">
+            <Link className="text-lg font-semibold tracking-tight" href="/">
+              Vela
+            </Link>
+            <span className="rounded-full border border-line bg-white/80 px-3 py-1.5 text-xs font-medium uppercase tracking-[0.18em] text-pine">
+              V1
+            </span>
+          </div>
+          <nav aria-label="Primary" className="flex flex-wrap items-center gap-2 text-sm text-stone">
             {navLinks.map((link) => (
               <Link
                 key={link.href}

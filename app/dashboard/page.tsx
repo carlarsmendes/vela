@@ -8,8 +8,16 @@ export default function DashboardPage() {
       <PageHeader
         eyebrow="Dashboard"
         title="Your space at a glance"
-        description="A practical overview for cycle tracking, body metrics, and future guidance."
+        description="A practical overview for cycle timing, body metrics, and lightweight training support."
       />
+
+      <SurfaceCard className="space-y-3">
+        <p className="text-sm font-medium uppercase tracking-[0.18em] text-pine">Coming next</p>
+        <p className="text-sm leading-6 text-stone">
+          The next layer will connect onboarding to real auth state, then add body entry logging
+          with only the fields a user chooses to fill.
+        </p>
+      </SurfaceCard>
 
       <div className="grid gap-4">
         {dashboardCards.map((card) => (

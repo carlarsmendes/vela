@@ -1,61 +1,90 @@
 # Vela
 
-Vela is a minimal, cycle-aware training companion. This first version focuses on the project foundation: a calm mobile-first interface, onboarding for average cycle length, and starter routes for auth and future tracking workflows.
+Vela is a minimal cycle-aware training companion for people who want a calmer way to track their cycle, body metrics, and training context over time.
+
+## V1 Scope
+
+The current V1 foundation focuses on:
+
+- email/password auth structure with Supabase
+- onboarding for average cycle length and training focus
+- a body metrics direction that includes weight, waist, hips, bust / chest, thigh, arm, neck, body fat %, and optional notes
+- starter dashboard and app layout for future tracking flows
+
+Not in scope yet:
+
+- charts
+- CSV export
+- prediction logic
+- recommendation logic
+- finished database integration
 
 ## Stack
 
-- Next.js with App Router and TypeScript
+- Next.js App Router
+- TypeScript
 - Tailwind CSS
-- Supabase for future auth and database integration
+- Supabase
 
-## Project Structure
+## Local Development
 
-- `app/` application routes and layout
-- `components/` reusable UI building blocks
-- `lib/` shared helpers, including Supabase client setup
-- `types/` shared TypeScript types
-
-## Run Locally
-
-1. Install dependencies:
+1. Install dependencies
 
 ```bash
 npm install
 ```
 
-2. Copy the example environment file:
+2. Create a local env file
 
 ```bash
 cp .env.example .env.local
 ```
 
-3. Start the development server:
+3. Add your Supabase values to `.env.local`
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=your-project-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+```
+
+4. Start the app
 
 ```bash
 npm run dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000)
+5. Open `http://localhost:3000`
 
 ## Environment Variables
-
-These are not used deeply yet, but Vela will need them when Supabase auth and persistence are added:
 
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 
-## Current Scope
+## Current App Routes
 
-This foundation includes:
+- `/`
+- `/login`
+- `/signup`
+- `/onboarding`
+- `/dashboard`
+- `/auth/error`
 
-- a shared layout and homepage
-- placeholder routes for login, signup, onboarding, and dashboard
-- a starter onboarding form for average cycle length
-- a dashboard shell with placeholder cards
+## Auth Foundation Notes
 
-Still to do next:
+- Supabase auth is wired for email/password flows.
+- The signup flow uses `/auth/callback` for email confirmation redirects.
+- The onboarding flow is currently saved in local storage as a temporary bridge until user profile persistence is added.
 
-- real auth flows with Supabase
-- database schema and persistence
-- logging flows for metrics and period dates
-- charts, predictions, and training guidance
+## Project Structure
+
+- `app/` routes, server actions, and auth callback handler
+- `components/` reusable UI pieces
+- `lib/` shared config, onboarding helpers, and Supabase clients
+- `types/` shared TypeScript types
+
+## Next Steps
+
+- connect onboarding data to authenticated user profiles
+- add the first `body_entries` table and save flow
+- add protected dashboard behavior once auth is fully configured
+- begin logging flows for weight, measurements, and period start dates

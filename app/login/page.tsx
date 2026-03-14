@@ -1,5 +1,5 @@
-import Link from "next/link";
-
+import { loginAction } from "@/app/auth-actions";
+import { AuthForm } from "@/components/auth-form";
 import { PageHeader } from "@/components/page-header";
 import { SurfaceCard } from "@/components/surface-card";
 
@@ -9,19 +9,17 @@ export default function LoginPage() {
       <PageHeader
         eyebrow="Account"
         title="Log in"
-        description="A simple sign-in flow will be added here once Supabase auth is connected."
+        description="Use your email and password once your Supabase project is connected."
       />
 
-      <SurfaceCard className="space-y-4">
-        <p className="text-sm leading-6 text-stone">
-          This placeholder keeps the route and visual system ready for the first auth pass.
-        </p>
-        <Link
-          className="inline-flex items-center justify-center rounded-full border border-line px-4 py-2 text-sm font-medium transition hover:bg-rosewater"
-          href="/signup"
-        >
-          Need an account?
-        </Link>
+      <SurfaceCard>
+        <AuthForm
+          action={loginAction}
+          alternateHref="/signup"
+          alternateLabel="Need an account?"
+          description="This is the first auth structure. It is ready for Supabase credentials and basic email/password testing."
+          mode="login"
+        />
       </SurfaceCard>
     </div>
   );
