@@ -6,58 +6,46 @@ import { useActionState } from "react";
 import { SubmitButton } from "@/components/submit-button";
 import type { AuthActionState } from "@/types";
 
-type AuthFormProps = {
+type PasswordUpdateFormProps = {
   action: (
     state: AuthActionState,
     formData: FormData,
   ) => Promise<AuthActionState>;
-  alternateHref: string;
-  alternateLabel: string;
-  description: string;
-  mode: "login" | "signup";
 };
 
 const initialState: AuthActionState = {
   status: "idle",
 };
 
-export function AuthForm({
-  action,
-  alternateHref,
-  alternateLabel,
-  description,
-  mode,
-}: AuthFormProps) {
+export function PasswordUpdateForm({ action }: PasswordUpdateFormProps) {
   const [state, formAction] = useActionState(action, initialState);
 
   return (
     <form action={formAction} className="space-y-5">
-      <p className="text-sm leading-6 text-stone">{description}</p>
-
       <div className="space-y-2">
-        <label className="text-sm font-medium text-ink" htmlFor={`${mode}-email`}>
-          Email
+        <label className="text-sm font-medium text-ink" htmlFor="reset-password">
+          New password
         </label>
         <input
-          autoComplete="email"
+          autoComplete="new-password"
           className="w-full rounded-2xl border border-line bg-sand px-4 py-3 text-base text-ink outline-none transition focus:border-pine focus:bg-white"
-          id={`${mode}-email`}
-          name="email"
-          placeholder="you@example.com"
-          type="email"
+          id="reset-password"
+          name="password"
+          placeholder="At least 6 characters"
+          type="password"
         />
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium text-ink" htmlFor={`${mode}-password`}>
-          Password
+        <label className="text-sm font-medium text-ink" htmlFor="reset-password-confirm">
+          Confirm password
         </label>
         <input
-          autoComplete={mode === "login" ? "current-password" : "new-password"}
+          autoComplete="new-password"
           className="w-full rounded-2xl border border-line bg-sand px-4 py-3 text-base text-ink outline-none transition focus:border-pine focus:bg-white"
-          id={`${mode}-password`}
-          name="password"
-          placeholder="At least 6 characters"
+          id="reset-password-confirm"
+          name="confirmPassword"
+          placeholder="Repeat your new password"
           type="password"
         />
       </div>
@@ -74,25 +62,13 @@ export function AuthForm({
         </div>
       ) : null}
 
-      <SubmitButton
-        idleLabel={mode === "login" ? "Log in" : "Create account"}
-        pendingLabel={mode === "login" ? "Logging in..." : "Creating account..."}
-      />
-
-      {mode === "login" ? (
-        <Link
-          className="inline-flex text-sm font-medium text-stone transition hover:text-ink"
-          href="/forgot-password"
-        >
-          Forgot password?
-        </Link>
-      ) : null}
+      <SubmitButton idleLabel="Update password" pendingLabel="Updating..." />
 
       <Link
         className="inline-flex text-sm font-medium text-stone transition hover:text-ink"
-        href={alternateHref}
+        href="/login"
       >
-        {alternateLabel}
+        Back to log in
       </Link>
     </form>
   );

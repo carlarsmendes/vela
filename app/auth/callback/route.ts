@@ -6,6 +6,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
+  const type = requestUrl.searchParams.get("type");
   const next = requestUrl.searchParams.get("next") ?? "/dashboard";
 
   if (!hasSupabaseEnv()) {
@@ -17,6 +18,10 @@ export async function GET(request: Request) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error) {
+      if (type === "recovery") {
+        return NextResponse.redirect(new URL("/reset-password", requestUrl.origin));
+      }
+
       return NextResponse.redirect(new URL(next, requestUrl.origin));
     }
   }

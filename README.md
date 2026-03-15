@@ -65,6 +65,8 @@ npm run dev
 - `/`
 - `/login`
 - `/signup`
+- `/forgot-password`
+- `/reset-password`
 - `/onboarding`
 - `/dashboard`
 - `/auth/error`
@@ -73,6 +75,7 @@ npm run dev
 
 - Supabase auth is wired for email/password flows.
 - The signup flow uses `/auth/callback` for email confirmation redirects.
+- The password recovery flow sends users through `/auth/callback` and into `/reset-password`.
 - The onboarding flow is currently saved in local storage as a temporary bridge until user profile persistence is added.
 
 ## Project Structure
