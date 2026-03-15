@@ -8,9 +8,9 @@ The current Vela foundation focuses on:
 
 - email/password auth structure with Supabase
 - password recovery flow
-- onboarding for average cycle length and training focus
-- a body metrics direction that includes weight, waist, hips, bust / chest, thigh, arm, neck, body fat %, and optional notes
-- starter dashboard and app layout for future tracking flows
+- persisted onboarding for average cycle length and training focus
+- first body metrics entry flow with date, optional metrics, and optional note
+- dashboard with profile summary and recent body entries
 
 Not in scope yet:
 
@@ -78,17 +78,31 @@ npm run dev
 - The signup flow uses `/auth/callback` for email confirmation redirects.
 - The password recovery flow sends users through `/auth/callback` and into `/reset-password`.
 - The header now reflects auth state: logged-out users see `Log in` and `Sign up`, while logged-in users see their email and a `Log out` action.
-- The onboarding flow is currently saved in local storage as a temporary bridge until user profile persistence is added.
+- Onboarding and body entries now persist to Supabase after the required tables are created.
+- The SQL setup for `profiles` and `body_entries` lives in `supabase/schema.sql`.
 
 ## Current Product State
 
 - homepage and base app shell are in place
 - signup and login are wired to Supabase
 - forgot-password and reset-password flows are wired to Supabase
-- onboarding collects average cycle length and preferred training focus
-- onboarding introduces the Vela body metrics set
-- dashboard is still a placeholder, ready for real tracked data
+- onboarding saves average cycle length and preferred training focus to Supabase
+- users can create body entries with one or more metrics plus an optional note
+- dashboard shows saved profile details and recent body entries
 - authenticated state is visible in the header
+
+## Supabase Setup
+
+Before persisted onboarding and body entries can work, run the SQL in:
+
+- `supabase/schema.sql`
+
+Run it in the Supabase SQL editor for your project. This creates:
+
+- `profiles`
+- `body_entries`
+- row-level security policies for both tables
+- the `updated_at` trigger for `profiles`
 
 ## Project Structure
 
@@ -99,7 +113,7 @@ npm run dev
 
 ## Next Steps
 
-- connect onboarding data to authenticated user profiles
-- add the first `body_entries` table and save flow
-- add protected dashboard behavior once auth is fully configured
-- begin logging flows for weight, measurements, and period start dates
+- add edit and delete support for body entries
+- add period start logging and the first cycle-history view
+- connect onboarding completion to routing decisions
+- begin trend views for weight and measurement history

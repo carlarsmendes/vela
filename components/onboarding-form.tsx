@@ -1,61 +1,33 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useActionState, useState } from "react";
 
 import { SubmitButton } from "@/components/submit-button";
-import { initialOnboardingDraft, ONBOARDING_STORAGE_KEY } from "@/lib/onboarding-storage";
 import { metricFields, trainingFocusOptions } from "@/lib/site";
-import type { OnboardingDraft, TrainingFocus } from "@/types";
+import type { FormActionState, OnboardingDraft, TrainingFocus } from "@/types";
 
-export function OnboardingForm() {
-  const [draft, setDraft] = useState<OnboardingDraft>(initialOnboardingDraft);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [isSaved, setIsSaved] = useState(false);
+type OnboardingFormProps = {
+  action: (
+    state: FormActionState,
+    formData: FormData,
+  ) => Promise<FormActionState>;
+  initialDraft: OnboardingDraft;
+};
 
-  useEffect(() => {
-    const storedValue = window.localStorage.getItem(ONBOARDING_STORAGE_KEY);
+const initialState: FormActionState = {
+  status: "idle",
+};
 
-    if (storedValue) {
-      try {
-        const parsedValue = JSON.parse(storedValue) as Partial<OnboardingDraft>;
-        const nextDraft: OnboardingDraft = {
-          averageCycleLength:
-            typeof parsedValue.averageCycleLength === "string"
-              ? parsedValue.averageCycleLength
-              : initialOnboardingDraft.averageCycleLength,
-          trainingFocus:
-            parsedValue.trainingFocus === "crossfit" ||
-            parsedValue.trainingFocus === "running" ||
-            parsedValue.trainingFocus === "both"
-              ? parsedValue.trainingFocus
-              : initialOnboardingDraft.trainingFocus,
-        };
-
-        const timeoutId = window.setTimeout(() => {
-          setDraft(nextDraft);
-          setIsLoaded(true);
-        }, 0);
-
-        return () => window.clearTimeout(timeoutId);
-      } catch {
-        window.localStorage.removeItem(ONBOARDING_STORAGE_KEY);
-      }
-    }
-
-    const timeoutId = window.setTimeout(() => {
-      setIsLoaded(true);
-    }, 0);
-
-    return () => window.clearTimeout(timeoutId);
-  }, []);
+export function OnboardingForm({ action, initialDraft }: OnboardingFormProps) {
+  const [draft, setDraft] = useState<OnboardingDraft>(initialDraft);
+  const [state, formAction] = useActionState(action, initialState);
 
   function updateTrainingFocus(trainingFocus: TrainingFocus) {
     setDraft((currentDraft) => ({
       ...currentDraft,
       trainingFocus,
     }));
-    setIsSaved(false);
   }
 
   function updateAverageCycleLength(averageCycleLength: string) {
@@ -63,30 +35,10 @@ export function OnboardingForm() {
       ...currentDraft,
       averageCycleLength,
     }));
-    setIsSaved(false);
-  }
-
-  function handleSubmit(formData: FormData) {
-    const averageCycleLength = formData.get("averageCycleLength");
-
-    const nextDraft: OnboardingDraft = {
-      averageCycleLength:
-        typeof averageCycleLength === "string" && averageCycleLength.trim().length > 0
-          ? averageCycleLength.trim()
-          : "28",
-      trainingFocus: draft.trainingFocus,
-    };
-
-    setDraft(nextDraft);
-    window.localStorage.setItem(ONBOARDING_STORAGE_KEY, JSON.stringify(nextDraft));
-    setIsSaved(true);
-
-    // TODO: Replace local storage with a Supabase-backed onboarding/profile save
-    // once auth and the user profile table are in place.
   }
 
   return (
-    <form action={handleSubmit} className="space-y-6">
+    <form action={formAction} className="space-y-6">
       <div className="space-y-2">
         <label className="text-sm font-medium text-ink" htmlFor="averageCycleLength">
           Average cycle length
@@ -101,6 +53,7 @@ export function OnboardingForm() {
           type="number"
           value={draft.averageCycleLength}
         />
+        <input name="trainingFocus" type="hidden" value={draft.trainingFocus} />
         <p className="text-sm leading-6 text-stone">
           If you know your average, you can enter it here. If not, you can start with 28 and
           update it later.
@@ -164,9 +117,15 @@ export function OnboardingForm() {
         </p>
       </div>
 
-      {isSaved ? (
-        <div className="rounded-2xl border border-[#d8e6dd] bg-[#f4fbf6] px-4 py-3 text-sm leading-6 text-pine">
-          Onboarding draft saved on this device for now.
+      {state.message ? (
+        <div
+          className={`rounded-2xl px-4 py-3 text-sm leading-6 ${
+            state.status === "error"
+              ? "border border-[#efc5bc] bg-[#fff4f1] text-[#7b3f31]"
+              : "border border-[#d8e6dd] bg-[#f4fbf6] text-pine"
+          }`}
+        >
+          {state.message}
         </div>
       ) : null}
 
@@ -179,10 +138,6 @@ export function OnboardingForm() {
           Skip to dashboard placeholder
         </Link>
       </div>
-
-      {!isLoaded ? (
-        <p className="text-sm leading-6 text-stone">Loading your saved onboarding draft...</p>
-      ) : null}
     </form>
   );
 }

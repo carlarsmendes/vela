@@ -1,8 +1,24 @@
+import { redirect } from "next/navigation";
+
+import { saveOnboardingAction } from "@/app/data-actions";
 import { OnboardingForm } from "@/components/onboarding-form";
 import { PageHeader } from "@/components/page-header";
 import { SurfaceCard } from "@/components/surface-card";
+import { getCurrentUserContext, getProfile } from "@/lib/supabase/data";
 
-export default function OnboardingPage() {
+export default async function OnboardingPage() {
+  const { user } = await getCurrentUserContext();
+
+  if (!user) {
+    redirect("/login");
+  }
+
+  const { data: profile } = await getProfile(user.id);
+  const initialDraft = {
+    averageCycleLength: profile?.average_cycle_length?.toString() ?? "28",
+    trainingFocus: profile?.training_focus ?? "both",
+  };
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -12,7 +28,7 @@ export default function OnboardingPage() {
       />
 
       <SurfaceCard>
-        <OnboardingForm />
+        <OnboardingForm action={saveOnboardingAction} initialDraft={initialDraft} />
       </SurfaceCard>
     </div>
   );

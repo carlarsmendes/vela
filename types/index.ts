@@ -38,3 +38,32 @@ export type AuthActionState = {
   status: "idle" | "success" | "error";
   message?: string;
 };
+
+export type ProfileRecord = {
+  user_id: string;
+  average_cycle_length: number | null;
+  training_focus: TrainingFocus | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type BodyEntryRecord = {
+  id: string;
+  user_id: string;
+  date: string;
+  weight: number | null;
+  waist: number | null;
+  hips: number | null;
+  bust: number | null;
+  thigh: number | null;
+  arm: number | null;
+  neck: number | null;
+  body_fat_percentage: number | null;
+  note: string | null;
+  created_at: string;
+};
+
+export type FormActionState = {
+  status: "idle" | "success" | "error";
+  message?: string;
+};
