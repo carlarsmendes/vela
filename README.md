@@ -10,7 +10,9 @@ The current Vela foundation focuses on:
 - password recovery flow
 - persisted onboarding for average cycle length and training focus
 - first body metrics entry flow with date, optional metrics, and optional note
+- period start logging
 - dashboard with profile summary and recent body entries
+- first cycle history view
 
 Not in scope yet:
 
@@ -79,7 +81,8 @@ npm run dev
 - The password recovery flow sends users through `/auth/callback` and into `/reset-password`.
 - The header now reflects auth state: logged-out users see `Log in` and `Sign up`, while logged-in users see their email and a `Log out` action.
 - Onboarding and body entries now persist to Supabase after the required tables are created.
-- The SQL setup for `profiles` and `body_entries` lives in `supabase/schema.sql`.
+- Onboarding, body entries, and period starts now persist to Supabase after the required tables are created.
+- The SQL setup for `profiles`, `body_entries`, and `period_entries` lives in `supabase/schema.sql`.
 
 ## Current Product State
 
@@ -88,7 +91,8 @@ npm run dev
 - forgot-password and reset-password flows are wired to Supabase
 - onboarding saves average cycle length and preferred training focus to Supabase
 - users can create body entries with one or more metrics plus an optional note
-- dashboard shows saved profile details and recent body entries
+- users can log period starts
+- dashboard shows saved profile details, recent body entries, and cycle history
 - authenticated state is visible in the header
 
 ## Supabase Setup
@@ -101,6 +105,7 @@ Run it in the Supabase SQL editor for your project. This creates:
 
 - `profiles`
 - `body_entries`
+- `period_entries`
 - row-level security policies for both tables
 - the `updated_at` trigger for `profiles`
 
@@ -114,6 +119,7 @@ Run it in the Supabase SQL editor for your project. This creates:
 ## Next Steps
 
 - add edit and delete support for body entries
-- add period start logging and the first cycle-history view
 - connect onboarding completion to routing decisions
 - begin trend views for weight and measurement history
+- add editing and deletion for logged period starts
+- turn cycle history into prediction-aware summaries

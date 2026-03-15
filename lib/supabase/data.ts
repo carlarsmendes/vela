@@ -1,4 +1,4 @@
-import type { BodyEntryRecord, ProfileRecord } from "@/types";
+import type { BodyEntryRecord, CycleHistoryItem, PeriodEntryRecord, ProfileRecord } from "@/types";
 
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -39,4 +39,41 @@ export async function getRecentBodyEntries(userId: string, limit = 5) {
     .returns<BodyEntryRecord[]>();
 
   return { data: data ?? [], error };
+}
+
+export async function getRecentPeriodEntries(userId: string, limit = 6) {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("period_entries")
+    .select("*")
+    .eq("user_id", userId)
+    .order("start_date", { ascending: false })
+    .order("created_at", { ascending: false })
+    .limit(limit)
+    .returns<PeriodEntryRecord[]>();
+
+  return { data: data ?? [], error };
+}
+
+export function buildCycleHistory(entries: PeriodEntryRecord[]): CycleHistoryItem[] {
+  const orderedEntries = [...entries].sort((left, right) =>
+    left.start_date < right.start_date ? 1 : -1,
+  );
+
+  return orderedEntries.map((entry, index) => {
+    const previousEntry = orderedEntries[index + 1];
+    const cycleLengthDays = previousEntry
+      ? Math.round(
+          (new Date(entry.start_date).getTime() - new Date(previousEntry.start_date).getTime()) /
+            (1000 * 60 * 60 * 24),
+        )
+      : null;
+
+    return {
+      id: entry.id,
+      startDate: entry.start_date,
+      previousStartDate: previousEntry?.start_date ?? null,
+      cycleLengthDays,
+    };
+  });
 }

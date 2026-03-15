@@ -300,3 +300,51 @@ export async function deleteBodyEntryAction(
     message: "Body entry deleted.",
   };
 }
+
+export async function createPeriodEntryAction(
+  previousState: FormActionState = defaultFormState,
+  formData: FormData,
+): Promise<FormActionState> {
+  void previousState;
+
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    redirect("/login");
+  }
+
+  const startDate = parseRequiredString(formData.get("startDate"));
+
+  if (!startDate) {
+    return {
+      status: "error",
+      message: "Choose the start date you want to log.",
+    };
+  }
+
+  const { error } = await supabase.from("period_entries").insert({
+    user_id: user.id,
+    start_date: startDate,
+  });
+
+  if (error) {
+    return {
+      status: "error",
+      message:
+        error.code === "42P01"
+          ? "Run the updated SQL setup in Supabase before saving period starts."
+          : error.message,
+    };
+  }
+
+  revalidatePath("/dashboard");
+
+  return {
+    status: "success",
+    message: "Period start saved.",
+  };
+}

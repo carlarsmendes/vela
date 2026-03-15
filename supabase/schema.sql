@@ -22,11 +22,22 @@ create table if not exists public.body_entries (
   created_at timestamptz not null default timezone('utc', now())
 );
 
+create table if not exists public.period_entries (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users (id) on delete cascade,
+  start_date date not null,
+  created_at timestamptz not null default timezone('utc', now())
+);
+
 create index if not exists body_entries_user_id_date_idx
   on public.body_entries (user_id, date desc, created_at desc);
 
+create index if not exists period_entries_user_id_start_date_idx
+  on public.period_entries (user_id, start_date desc, created_at desc);
+
 alter table public.profiles enable row level security;
 alter table public.body_entries enable row level security;
+alter table public.period_entries enable row level security;
 
 create policy "Users can view their own profile"
   on public.profiles
@@ -50,6 +61,16 @@ create policy "Users can view their own body entries"
 
 create policy "Users can insert their own body entries"
   on public.body_entries
+  for insert
+  with check (auth.uid() = user_id);
+
+create policy "Users can view their own period entries"
+  on public.period_entries
+  for select
+  using (auth.uid() = user_id);
+
+create policy "Users can insert their own period entries"
+  on public.period_entries
   for insert
   with check (auth.uid() = user_id);
 

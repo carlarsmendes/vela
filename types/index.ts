@@ -63,6 +63,20 @@ export type BodyEntryRecord = {
   created_at: string;
 };
 
+export type PeriodEntryRecord = {
+  id: string;
+  user_id: string;
+  start_date: string;
+  created_at: string;
+};
+
+export type CycleHistoryItem = {
+  id: string;
+  startDate: string;
+  previousStartDate: string | null;
+  cycleLengthDays: number | null;
+};
+
 export type FormActionState = {
   status: "idle" | "success" | "error";
   message?: string;
