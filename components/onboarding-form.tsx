@@ -99,7 +99,7 @@ export function OnboardingForm({ action, initialDraft }: OnboardingFormProps) {
           <h2 className="text-base font-semibold tracking-tight text-ink">Body metrics</h2>
           <p className="text-sm leading-6 text-stone">
             You will be able to log only what is useful to you, without filling every field each
-            time.
+            time. These measurements are added on the dashboard after onboarding is saved.
           </p>
         </div>
 
@@ -115,6 +115,13 @@ export function OnboardingForm({ action, initialDraft }: OnboardingFormProps) {
           Weight may be logged more often. Measurements can stay on a weekly or every-few-weeks
           rhythm.
         </p>
+
+        <Link
+          className="inline-flex text-sm font-medium text-stone transition hover:text-ink"
+          href="/dashboard"
+        >
+          Body metrics are logged on the dashboard
+        </Link>
       </div>
 
       {state.message ? (

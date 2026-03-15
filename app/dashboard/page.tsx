@@ -1,6 +1,10 @@
 import { redirect } from "next/navigation";
 
-import { createBodyEntryAction } from "@/app/data-actions";
+import {
+  createBodyEntryAction,
+  deleteBodyEntryAction,
+  updateBodyEntryAction,
+} from "@/app/data-actions";
 import { BodyEntryForm } from "@/components/body-entry-form";
 import { BodyEntryList } from "@/components/body-entry-list";
 import { PageHeader } from "@/components/page-header";
@@ -75,7 +79,11 @@ export default async function DashboardPage() {
           </p>
         </div>
 
-        <BodyEntryList entries={entries} />
+        <BodyEntryList
+          deleteAction={deleteBodyEntryAction}
+          entries={entries}
+          updateAction={updateBodyEntryAction}
+        />
       </SurfaceCard>
 
       <div className="grid gap-4">

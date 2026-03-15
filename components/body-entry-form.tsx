@@ -1,9 +1,11 @@
 "use client";
 
 import { useActionState } from "react";
+import type { ReactNode } from "react";
 
 import { SubmitButton } from "@/components/submit-button";
 import { metricFields } from "@/lib/site";
+import type { BodyEntryRecord } from "@/types";
 import type { FormActionState } from "@/types";
 
 type BodyEntryFormProps = {
@@ -12,24 +14,36 @@ type BodyEntryFormProps = {
     formData: FormData,
   ) => Promise<FormActionState>;
   defaultDate: string;
+  initialEntry?: BodyEntryRecord | null;
+  pendingLabel?: string;
+  submitLabel?: string;
+  extraFields?: ReactNode;
 };
 
-const initialState: FormActionState = {
+export const defaultFormState: FormActionState = {
   status: "idle",
 };
 
-export function BodyEntryForm({ action, defaultDate }: BodyEntryFormProps) {
-  const [state, formAction] = useActionState(action, initialState);
+export function BodyEntryForm({
+  action,
+  defaultDate,
+  extraFields,
+  initialEntry,
+  pendingLabel = "Saving entry...",
+  submitLabel = "Save body entry",
+}: BodyEntryFormProps) {
+  const [state, formAction] = useActionState(action, defaultFormState);
 
   return (
     <form action={formAction} className="space-y-6">
+      {extraFields}
       <div className="space-y-2">
         <label className="text-sm font-medium text-ink" htmlFor="entry-date">
           Date
         </label>
         <input
           className="w-full rounded-2xl border border-line bg-sand px-4 py-3 text-base text-ink outline-none transition focus:border-pine focus:bg-white"
-          defaultValue={defaultDate}
+          defaultValue={initialEntry?.date ?? defaultDate}
           id="entry-date"
           name="date"
           type="date"
@@ -50,6 +64,16 @@ export function BodyEntryForm({ action, defaultDate }: BodyEntryFormProps) {
               placeholder="Optional"
               step="0.1"
               type="number"
+              defaultValue={
+                field.key === "bodyFatPercentage"
+                  ? initialEntry?.body_fat_percentage ?? ""
+                  : (initialEntry?.[
+                      field.key as keyof Pick<
+                        BodyEntryRecord,
+                        "weight" | "waist" | "hips" | "bust" | "thigh" | "arm" | "neck"
+                      >
+                    ] ?? "")
+              }
             />
           </div>
         ))}
@@ -64,6 +88,7 @@ export function BodyEntryForm({ action, defaultDate }: BodyEntryFormProps) {
           id="entry-note"
           name="note"
           placeholder="Optional context for this entry"
+          defaultValue={initialEntry?.note ?? ""}
         />
       </div>
 
@@ -84,7 +109,7 @@ export function BodyEntryForm({ action, defaultDate }: BodyEntryFormProps) {
         </div>
       ) : null}
 
-      <SubmitButton idleLabel="Save body entry" pendingLabel="Saving entry..." />
+      <SubmitButton idleLabel={submitLabel} pendingLabel={pendingLabel} />
     </form>
   );
 }

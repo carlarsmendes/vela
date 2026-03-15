@@ -162,3 +162,141 @@ export async function createBodyEntryAction(
     message: "Body entry saved.",
   };
 }
+
+export async function updateBodyEntryAction(
+  previousState: FormActionState = defaultFormState,
+  formData: FormData,
+): Promise<FormActionState> {
+  void previousState;
+
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    redirect("/login");
+  }
+
+  const entryId = parseRequiredString(formData.get("entryId"));
+  const date = parseRequiredString(formData.get("date"));
+  const weight = parseOptionalNumber(formData.get("weight"));
+  const waist = parseOptionalNumber(formData.get("waist"));
+  const hips = parseOptionalNumber(formData.get("hips"));
+  const bust = parseOptionalNumber(formData.get("bust"));
+  const thigh = parseOptionalNumber(formData.get("thigh"));
+  const arm = parseOptionalNumber(formData.get("arm"));
+  const neck = parseOptionalNumber(formData.get("neck"));
+  const bodyFatPercentage = parseOptionalNumber(formData.get("bodyFatPercentage"));
+  const note = parseRequiredString(formData.get("note"));
+
+  if (!entryId) {
+    return {
+      status: "error",
+      message: "We could not find the entry to update.",
+    };
+  }
+
+  if (!date) {
+    return {
+      status: "error",
+      message: "Choose the date for this entry.",
+    };
+  }
+
+  const hasAnyMetric = [
+    weight,
+    waist,
+    hips,
+    bust,
+    thigh,
+    arm,
+    neck,
+    bodyFatPercentage,
+  ].some((value) => value !== null);
+
+  if (!hasAnyMetric) {
+    return {
+      status: "error",
+      message: "Add at least one metric before saving.",
+    };
+  }
+
+  const { error } = await supabase
+    .from("body_entries")
+    .update({
+      date,
+      weight,
+      waist,
+      hips,
+      bust,
+      thigh,
+      arm,
+      neck,
+      body_fat_percentage: bodyFatPercentage,
+      note: note || null,
+    })
+    .eq("id", entryId)
+    .eq("user_id", user.id);
+
+  if (error) {
+    return {
+      status: "error",
+      message: error.message,
+    };
+  }
+
+  revalidatePath("/dashboard");
+
+  return {
+    status: "success",
+    message: "Body entry updated.",
+  };
+}
+
+export async function deleteBodyEntryAction(
+  previousState: FormActionState = defaultFormState,
+  formData: FormData,
+): Promise<FormActionState> {
+  void previousState;
+
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    redirect("/login");
+  }
+
+  const entryId = parseRequiredString(formData.get("entryId"));
+
+  if (!entryId) {
+    return {
+      status: "error",
+      message: "We could not find the entry to delete.",
+    };
+  }
+
+  const { error } = await supabase
+    .from("body_entries")
+    .delete()
+    .eq("id", entryId)
+    .eq("user_id", user.id);
+
+  if (error) {
+    return {
+      status: "error",
+      message: error.message,
+    };
+  }
+
+  revalidatePath("/dashboard");
+
+  return {
+    status: "success",
+    message: "Body entry deleted.",
+  };
+}
