@@ -13,7 +13,7 @@ export default function HomePage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        eyebrow="V1 foundation"
+        eyebrow="Vela"
         title="A clear starting point for cycle-aware training."
         description="Vela is designed to stay simple: calm structure, supportive tracking, and space to build useful patterns over time."
       />
@@ -21,7 +21,7 @@ export default function HomePage() {
       <SurfaceCard className="space-y-5">
         <div className="space-y-3">
           <p className="text-base leading-7 text-stone">
-            V1 focuses on a calm starting point for onboarding, body metrics, and cycle tracking
+            Vela focuses on a calm starting point for onboarding, body metrics, and cycle tracking
             without adding clutter too early.
           </p>
           <ul className="space-y-3 text-sm leading-6 text-stone">
@@ -59,7 +59,7 @@ export default function HomePage() {
         <p className="text-sm font-medium uppercase tracking-[0.18em] text-pine">Body metrics</p>
         <p className="text-sm leading-6 text-stone">
           Weight, waist, hips, bust or chest, thigh, arm, neck, body fat %, and an optional note
-          are part of the V1 direction.
+          are part of the Vela foundation.
         </p>
       </SurfaceCard>
     </div>

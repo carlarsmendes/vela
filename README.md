@@ -2,9 +2,9 @@
 
 Vela is a minimal cycle-aware training companion for people who want a calmer way to track their cycle, body metrics, and training context over time.
 
-## V1 Scope
+## Current Scope
 
-The current V1 foundation focuses on:
+The current Vela foundation focuses on:
 
 - email/password auth structure with Supabase
 - password recovery flow
@@ -86,7 +86,7 @@ npm run dev
 - signup and login are wired to Supabase
 - forgot-password and reset-password flows are wired to Supabase
 - onboarding collects average cycle length and preferred training focus
-- onboarding introduces the V1 body metrics set
+- onboarding introduces the Vela body metrics set
 - dashboard is still a placeholder, ready for real tracked data
 - authenticated state is visible in the header
 

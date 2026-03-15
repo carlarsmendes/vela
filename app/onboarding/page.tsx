@@ -8,7 +8,7 @@ export default function OnboardingPage() {
       <PageHeader
         eyebrow="Onboarding"
         title="Set a simple starting point"
-        description="Begin with your average cycle length, choose your training focus, and see how body metrics will fit into V1."
+        description="Begin with your average cycle length, choose your training focus, and see how body metrics fit into Vela."
       />
 
       <SurfaceCard>

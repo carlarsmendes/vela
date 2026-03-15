@@ -35,7 +35,7 @@ export async function AppShell({ children }: AppShellProps) {
               Vela
             </Link>
             <span className="rounded-full border border-line bg-white/80 px-3 py-1.5 text-xs font-medium uppercase tracking-[0.18em] text-pine">
-              V1
+              Vela
             </span>
           </div>
           <div className="flex flex-wrap items-center justify-between gap-3">
