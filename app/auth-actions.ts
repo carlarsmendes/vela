@@ -214,3 +214,12 @@ export async function updatePasswordAction(
     message: "Password updated. You can log in with your new password now.",
   };
 }
+
+export async function logoutAction() {
+  if (hasSupabaseEnv()) {
+    const supabase = await createSupabaseServerClient();
+    await supabase.auth.signOut();
+  }
+
+  redirect("/login");
+}

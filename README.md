@@ -7,6 +7,7 @@ Vela is a minimal cycle-aware training companion for people who want a calmer wa
 The current V1 foundation focuses on:
 
 - email/password auth structure with Supabase
+- password recovery flow
 - onboarding for average cycle length and training focus
 - a body metrics direction that includes weight, waist, hips, bust / chest, thigh, arm, neck, body fat %, and optional notes
 - starter dashboard and app layout for future tracking flows
@@ -76,7 +77,18 @@ npm run dev
 - Supabase auth is wired for email/password flows.
 - The signup flow uses `/auth/callback` for email confirmation redirects.
 - The password recovery flow sends users through `/auth/callback` and into `/reset-password`.
+- The header now reflects auth state: logged-out users see `Log in` and `Sign up`, while logged-in users see their email and a `Log out` action.
 - The onboarding flow is currently saved in local storage as a temporary bridge until user profile persistence is added.
+
+## Current Product State
+
+- homepage and base app shell are in place
+- signup and login are wired to Supabase
+- forgot-password and reset-password flows are wired to Supabase
+- onboarding collects average cycle length and preferred training focus
+- onboarding introduces the V1 body metrics set
+- dashboard is still a placeholder, ready for real tracked data
+- authenticated state is visible in the header
 
 ## Project Structure
 
