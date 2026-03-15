@@ -3,8 +3,10 @@ import { redirect } from "next/navigation";
 import {
   createBodyEntryAction,
   createPeriodEntryAction,
+  deletePeriodEntryAction,
   deleteBodyEntryAction,
   updateBodyEntryAction,
+  updatePeriodEntryAction,
 } from "@/app/data-actions";
 import { BodyEntryForm } from "@/components/body-entry-form";
 import { BodyEntryList } from "@/components/body-entry-list";
@@ -132,7 +134,12 @@ export default async function DashboardPage() {
           </p>
         </div>
 
-        <CycleHistoryList history={cycleHistory} periodEntries={periodEntries} />
+        <CycleHistoryList
+          deleteAction={deletePeriodEntryAction}
+          history={cycleHistory}
+          periodEntries={periodEntries}
+          updateAction={updatePeriodEntryAction}
+        />
       </SurfaceCard>
 
       <div className="grid gap-4">

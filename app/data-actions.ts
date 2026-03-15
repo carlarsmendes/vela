@@ -348,3 +348,105 @@ export async function createPeriodEntryAction(
     message: "Period start saved.",
   };
 }
+
+export async function updatePeriodEntryAction(
+  previousState: FormActionState = defaultFormState,
+  formData: FormData,
+): Promise<FormActionState> {
+  void previousState;
+
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    redirect("/login");
+  }
+
+  const entryId = parseRequiredString(formData.get("entryId"));
+  const startDate = parseRequiredString(formData.get("startDate"));
+
+  if (!entryId) {
+    return {
+      status: "error",
+      message: "We could not find the period start to update.",
+    };
+  }
+
+  if (!startDate) {
+    return {
+      status: "error",
+      message: "Choose the start date you want to save.",
+    };
+  }
+
+  const { error } = await supabase
+    .from("period_entries")
+    .update({
+      start_date: startDate,
+    })
+    .eq("id", entryId)
+    .eq("user_id", user.id);
+
+  if (error) {
+    return {
+      status: "error",
+      message: error.message,
+    };
+  }
+
+  revalidatePath("/dashboard");
+
+  return {
+    status: "success",
+    message: "Period start updated.",
+  };
+}
+
+export async function deletePeriodEntryAction(
+  previousState: FormActionState = defaultFormState,
+  formData: FormData,
+): Promise<FormActionState> {
+  void previousState;
+
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    redirect("/login");
+  }
+
+  const entryId = parseRequiredString(formData.get("entryId"));
+
+  if (!entryId) {
+    return {
+      status: "error",
+      message: "We could not find the period start to delete.",
+    };
+  }
+
+  const { error } = await supabase
+    .from("period_entries")
+    .delete()
+    .eq("id", entryId)
+    .eq("user_id", user.id);
+
+  if (error) {
+    return {
+      status: "error",
+      message: error.message,
+    };
+  }
+
+  revalidatePath("/dashboard");
+
+  return {
+    status: "success",
+    message: "Period start deleted.",
+  };
+}

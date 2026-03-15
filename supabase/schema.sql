@@ -74,6 +74,16 @@ create policy "Users can insert their own period entries"
   for insert
   with check (auth.uid() = user_id);
 
+create policy "Users can update their own period entries"
+  on public.period_entries
+  for update
+  using (auth.uid() = user_id);
+
+create policy "Users can delete their own period entries"
+  on public.period_entries
+  for delete
+  using (auth.uid() = user_id);
+
 create or replace function public.handle_updated_at()
 returns trigger
 language plpgsql

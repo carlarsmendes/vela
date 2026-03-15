@@ -1,9 +1,10 @@
 "use client";
 
 import { useActionState } from "react";
+import type { ReactNode } from "react";
 
 import { SubmitButton } from "@/components/submit-button";
-import type { FormActionState } from "@/types";
+import type { FormActionState, PeriodEntryRecord } from "@/types";
 
 type PeriodEntryFormProps = {
   action: (
@@ -11,24 +12,36 @@ type PeriodEntryFormProps = {
     formData: FormData,
   ) => Promise<FormActionState>;
   defaultDate: string;
+  extraFields?: ReactNode;
+  initialEntry?: PeriodEntryRecord | null;
+  pendingLabel?: string;
+  submitLabel?: string;
 };
 
-const initialState: FormActionState = {
+export const defaultPeriodFormState: FormActionState = {
   status: "idle",
 };
 
-export function PeriodEntryForm({ action, defaultDate }: PeriodEntryFormProps) {
-  const [state, formAction] = useActionState(action, initialState);
+export function PeriodEntryForm({
+  action,
+  defaultDate,
+  extraFields,
+  initialEntry,
+  pendingLabel = "Saving...",
+  submitLabel = "Save period start",
+}: PeriodEntryFormProps) {
+  const [state, formAction] = useActionState(action, defaultPeriodFormState);
 
   return (
     <form action={formAction} className="space-y-5">
+      {extraFields}
       <div className="space-y-2">
         <label className="text-sm font-medium text-ink" htmlFor="period-start-date">
           Period start date
         </label>
         <input
           className="w-full rounded-2xl border border-line bg-sand px-4 py-3 text-base text-ink outline-none transition focus:border-pine focus:bg-white"
-          defaultValue={defaultDate}
+          defaultValue={initialEntry?.start_date ?? defaultDate}
           id="period-start-date"
           name="startDate"
           type="date"
@@ -51,7 +64,7 @@ export function PeriodEntryForm({ action, defaultDate }: PeriodEntryFormProps) {
         </div>
       ) : null}
 
-      <SubmitButton idleLabel="Save period start" pendingLabel="Saving..." />
+      <SubmitButton idleLabel={submitLabel} pendingLabel={pendingLabel} />
     </form>
   );
 }
