@@ -1,11 +1,11 @@
 import type { DashboardCard, MetricField, NavLink, TrainingFocusOption } from "@/types";
 
-export const navLinks: NavLink[] = [
-  { href: "/onboarding", label: "Onboarding" },
-  { href: "/dashboard", label: "Dashboard" },
+export const authLinks: NavLink[] = [
   { href: "/login", label: "Log in" },
   { href: "/signup", label: "Sign up" },
 ];
+
+export const appLinks: NavLink[] = [{ href: "/dashboard", label: "Dashboard" }];
 
 export const trainingFocusOptions: TrainingFocusOption[] = [
   {
