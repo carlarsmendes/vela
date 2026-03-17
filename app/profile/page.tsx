@@ -27,14 +27,14 @@ export default async function ProfilePage() {
       <PageHeader
         eyebrow="Profile"
         title="Profile"
-        description="Your onboarding details live here once the account is set up."
+        description="Your cycle baseline and training focus live here once your account is set up."
       />
 
       <SurfaceCard className="space-y-4">
         <div className="space-y-1">
           <h2 className="text-lg font-semibold tracking-tight text-ink">Training profile</h2>
           <p className="text-sm leading-6 text-stone">
-            Update the cycle length and training focus Vela uses as your baseline.
+            Update the cycle length and training focus Vela uses as your working baseline.
           </p>
         </div>
 

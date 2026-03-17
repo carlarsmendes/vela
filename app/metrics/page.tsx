@@ -31,14 +31,14 @@ export default async function MetricsPage() {
       <PageHeader
         eyebrow="Metrics"
         title="Body metrics"
-        description="Track weight and measurements in one place, then build toward simple trends over time."
+        description="Keep weight and body measurements together, with room for clearer trends as your history builds."
       />
 
       <SurfaceCard className="space-y-4">
         <div className="space-y-1">
           <h2 className="text-lg font-semibold tracking-tight text-ink">Log a new entry</h2>
           <p className="text-sm leading-6 text-stone">
-            Weight can be logged more frequently. Measurements can stay on a weekly rhythm.
+            Weight may be worth logging more often. Measurements can stay on a slower weekly rhythm.
           </p>
         </div>
 
@@ -55,8 +55,7 @@ export default async function MetricsPage() {
         <div className="space-y-1">
           <h2 className="text-lg font-semibold tracking-tight text-ink">Trends</h2>
           <p className="text-sm leading-6 text-stone">
-            Charts will live here once Vela has enough logged data to show useful movement over
-            time.
+            Trend views will live here once there is enough history to show something useful.
           </p>
         </div>
 
@@ -64,13 +63,13 @@ export default async function MetricsPage() {
           <div className="border border-line bg-[#f7f3ee] px-4 py-5">
             <p className="text-xs uppercase tracking-[0.16em] text-pine">Weight trend</p>
             <p className="mt-2 text-sm leading-6 text-stone">
-              Placeholder for a simple weight-over-time view.
+              A simple view of how weight is moving over time will sit here.
             </p>
           </div>
           <div className="border border-line bg-[#f7f3ee] px-4 py-5">
             <p className="text-xs uppercase tracking-[0.16em] text-pine">Measurements trend</p>
             <p className="mt-2 text-sm leading-6 text-stone">
-              Placeholder for waist, hips, bust, thigh, arm, neck, and body fat trends.
+              Waist, hips, bust, thigh, arm, neck, and body fat trends will appear here.
             </p>
           </div>
         </div>
@@ -80,7 +79,7 @@ export default async function MetricsPage() {
         <div className="space-y-1">
           <h2 className="text-lg font-semibold tracking-tight text-ink">Recent entries</h2>
           <p className="text-sm leading-6 text-stone">
-            Review, correct, or remove recent entries as your log evolves.
+            Review, correct, or remove recent entries as your record takes shape.
           </p>
         </div>
 

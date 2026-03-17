@@ -42,7 +42,7 @@ export function BodyEntryForm({
           Date
         </label>
         <input
-          className="w-full rounded-2xl border border-line bg-sand px-4 py-3 text-base text-ink outline-none transition focus:border-pine focus:bg-white"
+          className="w-full border border-line bg-sand px-4 py-3 text-base text-ink outline-none transition focus:border-pine focus:bg-white"
           defaultValue={initialEntry?.date ?? defaultDate}
           id="entry-date"
           name="date"
@@ -57,7 +57,7 @@ export function BodyEntryForm({
               {field.label}
             </label>
             <input
-              className="w-full rounded-2xl border border-line bg-sand px-4 py-3 text-base text-ink outline-none transition focus:border-pine focus:bg-white"
+              className="w-full border border-line bg-sand px-4 py-3 text-base text-ink outline-none transition focus:border-pine focus:bg-white"
               id={field.key}
               inputMode="decimal"
               name={field.key}
@@ -84,7 +84,7 @@ export function BodyEntryForm({
           Note
         </label>
         <textarea
-          className="min-h-28 w-full rounded-2xl border border-line bg-sand px-4 py-3 text-base text-ink outline-none transition focus:border-pine focus:bg-white"
+          className="min-h-28 w-full border border-line bg-sand px-4 py-3 text-base text-ink outline-none transition focus:border-pine focus:bg-white"
           id="entry-note"
           name="note"
           placeholder="Optional context for this entry"
@@ -93,13 +93,13 @@ export function BodyEntryForm({
       </div>
 
       <p className="text-sm leading-6 text-stone">
-        Date is required. Add at least one metric. Weight can be logged more often, while
-        measurements can stay weekly or every few weeks.
+        Date is required. Add at least one metric. Weight may be logged more often, while
+        measurements can stay weekly or every couple of weeks.
       </p>
 
       {state.message ? (
         <div
-          className={`rounded-2xl px-4 py-3 text-sm leading-6 ${
+          className={`px-4 py-3 text-sm leading-6 ${
             state.status === "error"
               ? "border border-[#efc5bc] bg-[#fff4f1] text-[#7b3f31]"
               : "border border-[#d8e6dd] bg-[#f4fbf6] text-pine"

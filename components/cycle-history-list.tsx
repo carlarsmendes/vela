@@ -68,7 +68,7 @@ export function CycleHistoryList({
   if (periodEntries.length === 0) {
     return (
       <p className="text-sm leading-6 text-stone">
-        No period starts yet. Once you log them, Vela will show your recent cycle history here.
+        No period starts yet. Once you log them, your recent cycle history will build here.
       </p>
     );
   }
@@ -84,13 +84,13 @@ export function CycleHistoryList({
         }
 
         return (
-          <div key={item.id} className="rounded-2xl border border-line bg-sand p-4">
+          <div key={item.id} className="border border-line bg-sand p-4">
             <div className="flex items-center justify-between gap-3">
               <p className="text-sm font-medium text-ink">{item.startDate}</p>
               <div className="flex items-center gap-2">
-                <p className="text-xs uppercase tracking-[0.18em] text-pine">Period start</p>
+                <p className="text-xs uppercase tracking-[0.18em] text-pine">Logged start</p>
                 <button
-                  className="rounded-full bg-white px-3 py-1.5 text-xs font-medium text-stone transition hover:text-ink"
+                  className="border border-line bg-white px-3 py-1.5 text-xs font-medium text-stone transition hover:text-ink"
                   onClick={() => setEditingId(isEditing ? null : item.id)}
                   type="button"
                 >
@@ -113,12 +113,12 @@ export function CycleHistoryList({
               </div>
             ) : (
               <div className="mt-3 space-y-1 text-sm leading-6 text-stone">
-                <p>Previous start: {item.previousStartDate ?? "Not enough history yet"}</p>
+                <p>Previous start: {item.previousStartDate ?? "Need another logged start"}</p>
                 <p>
-                  Cycle length:{" "}
+                  Days between starts:{" "}
                   {item.cycleLengthDays !== null
                     ? `${item.cycleLengthDays} days`
-                    : "Needs another entry"}
+                    : "Need another logged start"}
                 </p>
               </div>
             )}

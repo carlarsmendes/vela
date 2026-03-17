@@ -70,8 +70,8 @@ export function AppShell({
               return (
                 <Link
                   key={link.href}
-                  className={`flex-1 text-center text-sm font-medium transition ${
-                    isActive ? "text-ink" : "text-stone hover:text-ink"
+                  className={`flex-1 border-t-2 pt-2 text-center text-sm font-medium transition ${
+                    isActive ? "border-pine text-ink" : "border-transparent text-stone hover:text-ink"
                   }`}
                   href={link.href}
                 >

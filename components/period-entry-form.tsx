@@ -40,7 +40,7 @@ export function PeriodEntryForm({
           Period start date
         </label>
         <input
-          className="w-full rounded-2xl border border-line bg-sand px-4 py-3 text-base text-ink outline-none transition focus:border-pine focus:bg-white"
+          className="w-full border border-line bg-sand px-4 py-3 text-base text-ink outline-none transition focus:border-pine focus:bg-white"
           defaultValue={initialEntry?.start_date ?? defaultDate}
           id="period-start-date"
           name="startDate"
@@ -49,12 +49,12 @@ export function PeriodEntryForm({
       </div>
 
       <p className="text-sm leading-6 text-stone">
-        Log the first day of bleeding. This gives Vela the anchor it needs for future cycle timing.
+        Log the first day of bleeding. This gives Vela the anchor it needs for cycle timing.
       </p>
 
       {state.message ? (
         <div
-          className={`rounded-2xl px-4 py-3 text-sm leading-6 ${
+          className={`px-4 py-3 text-sm leading-6 ${
             state.status === "error"
               ? "border border-[#efc5bc] bg-[#fff4f1] text-[#7b3f31]"
               : "border border-[#d8e6dd] bg-[#f4fbf6] text-pine"

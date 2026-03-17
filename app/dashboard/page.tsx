@@ -40,7 +40,7 @@ export default async function DashboardPage() {
       <PageHeader
         eyebrow="Dashboard"
         title="Today"
-        description="The main view keeps cycle timing and training context in the same calm place."
+        description="Your main view for cycle timing, training context, and the signals that matter most today."
       />
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -84,7 +84,7 @@ export default async function DashboardPage() {
         <div className="space-y-1">
           <h2 className="text-lg font-semibold tracking-tight text-ink">Log period start</h2>
           <p className="text-sm leading-6 text-stone">
-            Add the first day of each period so Vela can start building useful cycle history.
+            Log the first day of each period so Vela can keep your cycle timing grounded in real dates.
           </p>
         </div>
 
@@ -102,7 +102,7 @@ export default async function DashboardPage() {
         <div className="space-y-1">
           <h2 className="text-lg font-semibold tracking-tight text-ink">Cycle history</h2>
           <p className="text-sm leading-6 text-stone">
-            Recent period starts and the days between them give Vela its first timing picture.
+            Recent starts and the days between them help Vela build a steadier picture of your cycle.
           </p>
         </div>
 

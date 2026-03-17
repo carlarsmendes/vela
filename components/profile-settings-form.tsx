@@ -58,7 +58,7 @@ export function ProfileSettingsForm({
           value={draft.averageCycleLength}
         />
         <p className="text-sm leading-6 text-stone">
-          Update this whenever your logged history gives you a clearer average.
+          You can adjust this as your logged history gives you a clearer average.
         </p>
       </div>
 
@@ -66,7 +66,7 @@ export function ProfileSettingsForm({
         <div className="space-y-1">
           <h2 className="text-base font-semibold tracking-tight text-ink">Training focus</h2>
           <p className="text-sm leading-6 text-stone">
-            This helps Vela keep future training context relevant to how you train.
+            This helps Vela keep training context aligned with how you actually train.
           </p>
         </div>
 

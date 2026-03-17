@@ -78,7 +78,7 @@ export function BodyEntryList({ entries, updateAction, deleteAction }: BodyEntry
   if (entries.length === 0) {
     return (
       <p className="text-sm leading-6 text-stone">
-        No body entries yet. Your recent metrics will appear here once you save the first one.
+        No body entries yet. Recent metrics will appear here once you save the first one.
       </p>
     );
   }
@@ -90,13 +90,13 @@ export function BodyEntryList({ entries, updateAction, deleteAction }: BodyEntry
         const isEditing = editingId === entry.id;
 
         return (
-          <div key={entry.id} className="rounded-2xl border border-line bg-sand p-4">
+          <div key={entry.id} className="border border-line bg-sand p-4">
             <div className="mb-3 flex items-center justify-between gap-3">
               <p className="text-sm font-medium text-ink">{entry.date}</p>
               <div className="flex items-center gap-2">
-                <p className="text-xs uppercase tracking-[0.18em] text-pine">Body entry</p>
+                <p className="text-xs uppercase tracking-[0.18em] text-pine">Entry</p>
                 <button
-                  className="rounded-full bg-white px-3 py-1.5 text-xs font-medium text-stone transition hover:text-ink"
+                  className="border border-line bg-white px-3 py-1.5 text-xs font-medium text-stone transition hover:text-ink"
                   onClick={() => setEditingId(isEditing ? null : entry.id)}
                   type="button"
                 >
@@ -123,7 +123,7 @@ export function BodyEntryList({ entries, updateAction, deleteAction }: BodyEntry
                   {visibleMetrics.map((field) => (
                     <span
                       key={field}
-                      className="rounded-full bg-white px-3 py-1.5 text-xs font-medium text-stone"
+                      className="border border-line bg-white px-3 py-1.5 text-xs font-medium text-stone"
                     >
                       {fieldLabels[field]}: {entry[field]}
                     </span>

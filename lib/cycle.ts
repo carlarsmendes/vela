@@ -32,32 +32,32 @@ function getTrainingRecommendation(phase: CyclePhase, trainingFocus: TrainingFoc
   const genericRecommendations: Record<CyclePhase, { title: string; detail: string }> = {
     Menstrual: {
       title: "A steadier effort may suit today",
-      detail: "Recovery, technique work, or lower-pressure sessions may feel more supportive right now.",
+      detail: "Recovery, technique work, or lower-pressure sessions may be the better fit right now.",
     },
     Follicular: {
       title: "Today may support stronger efforts",
-      detail: "This phase can be a good window for building intensity, volume, or skill confidence.",
+      detail: "This phase may be a good window for building intensity, volume, or confidence in training.",
     },
     Ovulatory: {
       title: "Power and confidence may feel more available",
-      detail: "If energy feels good, this can be a strong time for sharper efforts or heavier work.",
+      detail: "If energy feels good, this can be a strong window for sharper efforts or heavier work.",
     },
     Luteal: {
       title: "Energy may be more variable right now",
-      detail: "A steadier pace, clear structure, and flexible expectations may suit this phase better.",
+      detail: "A steadier pace, clear structure, and a little more flexibility may suit this phase better.",
     },
     Unknown: {
-      title: "Keep building your rhythm",
-      detail: "Once more cycle data is logged, Vela can give more phase-aware context here.",
+      title: "Keep building your record",
+      detail: "Once more cycle data is logged, Vela can offer clearer phase-aware context here.",
     },
   };
 
   const focusAdjustments: Record<TrainingFocus, Partial<Record<CyclePhase, string>>> = {
     crossfit: {
-      Follicular: "If the day feels good, heavier lifts or harder mixed efforts may fit well.",
+      Follicular: "If the day feels good, heavier lifts, denser sessions, or harder mixed efforts may fit well.",
       Ovulatory: "Explosive work, stronger lifts, or sharper conditioning may feel more available.",
-      Luteal: "More controlled intensity, simpler structures, or strength maintenance may suit today.",
-      Menstrual: "Technique, easy aerobic work, or scaled sessions may feel more manageable.",
+      Luteal: "More controlled intensity, simpler structures, or strength maintenance may suit today better.",
+      Menstrual: "Technique work, easy aerobic work, or scaled sessions may feel more manageable.",
     },
     running: {
       Follicular: "This may be a useful window for quicker sessions, longer runs, or stronger workouts.",
@@ -113,7 +113,7 @@ export function buildCycleSummary(
     currentPhase,
     cycleDay: cycleDay > 0 ? cycleDay : null,
     predictedNextPeriod: formatDate(predictedNextPeriodDate),
-    daysUntilNextPeriod,
+    daysUntilNextPeriod: Math.max(daysUntilNextPeriod, 0),
     trainingRecommendation: recommendation.title,
     recommendationDetail: recommendation.detail,
   };
