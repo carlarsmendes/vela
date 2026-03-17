@@ -33,6 +33,7 @@ export async function saveOnboardingAction(
 
   const averageCycleLengthValue = parseRequiredString(formData.get("averageCycleLength"));
   const trainingFocusValue = parseRequiredString(formData.get("trainingFocus"));
+  const redirectPath = parseRequiredString(formData.get("redirectPath"));
   const averageCycleLength = Number(averageCycleLengthValue);
 
   if (!averageCycleLengthValue || !Number.isFinite(averageCycleLength) || averageCycleLength < 10) {
@@ -72,10 +73,15 @@ export async function saveOnboardingAction(
 
   revalidatePath("/onboarding");
   revalidatePath("/dashboard");
+  revalidatePath("/profile");
+
+  if (redirectPath) {
+    redirect(redirectPath);
+  }
 
   return {
     status: "success",
-    message: "Your onboarding details have been saved.",
+    message: "Your details have been saved.",
   };
 }
 

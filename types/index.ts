@@ -81,3 +81,22 @@ export type FormActionState = {
   status: "idle" | "success" | "error";
   message?: string;
 };
+
+export type AppUserState = {
+  isAuthenticated: boolean;
+  isOnboardingComplete: boolean;
+  profile: ProfileRecord | null;
+  userEmail: string | null;
+  userId: string | null;
+};
+
+export type CyclePhase = "Menstrual" | "Follicular" | "Ovulatory" | "Luteal" | "Unknown";
+
+export type CycleSummary = {
+  currentPhase: CyclePhase;
+  cycleDay: number | null;
+  predictedNextPeriod: string | null;
+  daysUntilNextPeriod: number | null;
+  trainingRecommendation: string;
+  recommendationDetail: string;
+};

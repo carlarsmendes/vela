@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
+
+import { getCurrentUserAppState, getPostAuthPath } from "@/lib/supabase/data";
 
 const productBlocks = [
   {
@@ -15,7 +18,13 @@ const productBlocks = [
   },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const appState = await getCurrentUserAppState();
+
+  if (appState.isAuthenticated) {
+    redirect(getPostAuthPath(appState));
+  }
+
   return (
     <div className="space-y-14 pb-4">
       <section className="space-y-8 border-b border-line/80 pb-10">
@@ -41,12 +50,6 @@ export default function HomePage() {
             href="/login"
           >
             Log in
-          </Link>
-          <Link
-            className="inline-flex items-center justify-center px-1 py-3 text-sm font-medium text-pine transition hover:text-ink"
-            href="/onboarding"
-          >
-            Preview onboarding
           </Link>
         </div>
       </section>

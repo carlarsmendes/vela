@@ -1,9 +1,18 @@
+import { redirect } from "next/navigation";
+
 import { signupAction } from "@/app/auth-actions";
 import { AuthForm } from "@/components/auth-form";
 import { PageHeader } from "@/components/page-header";
 import { SurfaceCard } from "@/components/surface-card";
+import { getCurrentUserAppState, getPostAuthPath } from "@/lib/supabase/data";
 
-export default function SignupPage() {
+export default async function SignupPage() {
+  const appState = await getCurrentUserAppState();
+
+  if (appState.isAuthenticated) {
+    redirect(getPostAuthPath(appState));
+  }
+
   return (
     <div className="space-y-6">
       <PageHeader

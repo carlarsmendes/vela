@@ -1,95 +1,83 @@
 import { redirect } from "next/navigation";
 
 import {
-  createBodyEntryAction,
   createPeriodEntryAction,
   deletePeriodEntryAction,
-  deleteBodyEntryAction,
-  updateBodyEntryAction,
   updatePeriodEntryAction,
 } from "@/app/data-actions";
-import { BodyEntryForm } from "@/components/body-entry-form";
-import { BodyEntryList } from "@/components/body-entry-list";
 import { CycleHistoryList } from "@/components/cycle-history-list";
 import { PageHeader } from "@/components/page-header";
 import { PeriodEntryForm } from "@/components/period-entry-form";
 import { SurfaceCard } from "@/components/surface-card";
-import { dashboardCards } from "@/lib/site";
+import { buildCycleSummary } from "@/lib/cycle";
 import {
   buildCycleHistory,
-  getCurrentUserContext,
-  getProfile,
-  getRecentBodyEntries,
+  getCurrentUserAppState,
   getRecentPeriodEntries,
 } from "@/lib/supabase/data";
 
 export default async function DashboardPage() {
-  const { user } = await getCurrentUserContext();
+  const appState = await getCurrentUserAppState();
 
-  if (!user) {
+  if (!appState.isAuthenticated) {
     redirect("/login");
   }
 
-  const [
-    { data: profile, error: profileError },
-    { data: entries, error: entriesError },
-    { data: periodEntries, error: periodEntriesError },
-  ] = await Promise.all([
-    getProfile(user.id),
-    getRecentBodyEntries(user.id),
-    getRecentPeriodEntries(user.id),
-  ]);
-  const setupIncomplete =
-    profileError?.code === "42P01" ||
-    entriesError?.code === "42P01" ||
-    periodEntriesError?.code === "42P01";
+  if (!appState.isOnboardingComplete) {
+    redirect("/onboarding");
+  }
+
+  const { data: periodEntries, error: periodEntriesError } = await getRecentPeriodEntries(
+    appState.userId as string,
+  );
+  const setupIncomplete = periodEntriesError?.code === "42P01";
   const defaultDate = new Date().toISOString().slice(0, 10);
   const cycleHistory = buildCycleHistory(periodEntries);
+  const cycleSummary = buildCycleSummary(appState.profile, periodEntries);
 
   return (
     <div className="space-y-6">
       <PageHeader
         eyebrow="Dashboard"
-        title="Your space at a glance"
-        description="A practical overview for cycle timing, body metrics, and lightweight training support."
+        title="Today"
+        description="The main view keeps cycle timing and training context in the same calm place."
       />
 
+      <div className="grid gap-4 sm:grid-cols-2">
+        <SurfaceCard className="space-y-1">
+          <p className="text-xs uppercase tracking-[0.16em] text-pine">Current phase</p>
+          <p className="text-2xl font-semibold tracking-tight text-ink">{cycleSummary.currentPhase}</p>
+        </SurfaceCard>
+        <SurfaceCard className="space-y-1">
+          <p className="text-xs uppercase tracking-[0.16em] text-pine">Cycle day</p>
+          <p className="text-2xl font-semibold tracking-tight text-ink">
+            {cycleSummary.cycleDay ?? "Not enough data"}
+          </p>
+        </SurfaceCard>
+        <SurfaceCard className="space-y-1">
+          <p className="text-xs uppercase tracking-[0.16em] text-pine">Predicted next period</p>
+          <p className="text-base font-medium text-ink">
+            {cycleSummary.predictedNextPeriod ?? "Need more history"}
+          </p>
+        </SurfaceCard>
+        <SurfaceCard className="space-y-1">
+          <p className="text-xs uppercase tracking-[0.16em] text-pine">Days until next period</p>
+          <p className="text-base font-medium text-ink">
+            {cycleSummary.daysUntilNextPeriod !== null
+              ? cycleSummary.daysUntilNextPeriod
+              : "Need more history"}
+          </p>
+        </SurfaceCard>
+      </div>
+
       <SurfaceCard className="space-y-3">
-        <p className="text-sm font-medium uppercase tracking-[0.18em] text-pine">Profile</p>
-        {profile ? (
-          <div className="space-y-2 text-sm leading-6 text-stone">
-            <p>Average cycle length: {profile.average_cycle_length ?? "Not set yet"}</p>
-            <p>
-              Training focus:{" "}
-              {profile.training_focus
-                ? profile.training_focus.charAt(0).toUpperCase() + profile.training_focus.slice(1)
-                : "Not set yet"}
-            </p>
-          </div>
-        ) : (
-          <p className="text-sm leading-6 text-stone">
-            Save onboarding first so your starting profile appears here.
-          </p>
-        )}
-      </SurfaceCard>
-
-      <SurfaceCard className="space-y-4">
+        <p className="text-sm font-medium uppercase tracking-[0.18em] text-pine">Training recommendation</p>
         <div className="space-y-1">
-          <h2 className="text-lg font-semibold tracking-tight text-ink">Log body metrics</h2>
-          <p className="text-sm leading-6 text-stone">
-            Save weight whenever useful and add measurements on a slower rhythm when you want more
-            context.
-          </p>
+          <h2 className="text-xl font-semibold tracking-tight text-ink">
+            {cycleSummary.trainingRecommendation}
+          </h2>
+          <p className="text-sm leading-6 text-stone">{cycleSummary.recommendationDetail}</p>
         </div>
-
-        {setupIncomplete ? (
-          <div className="rounded-2xl border border-[#efc5bc] bg-[#fff4f1] px-4 py-3 text-sm leading-6 text-[#7b3f31]">
-            Run the SQL in <code>supabase/schema.sql</code> inside your Supabase SQL editor before
-            saving onboarding or body entries.
-          </div>
-        ) : null}
-
-        <BodyEntryForm action={createBodyEntryAction} defaultDate={defaultDate} />
       </SurfaceCard>
 
       <SurfaceCard className="space-y-4">
@@ -101,7 +89,7 @@ export default async function DashboardPage() {
         </div>
 
         {setupIncomplete ? (
-          <div className="rounded-2xl border border-[#efc5bc] bg-[#fff4f1] px-4 py-3 text-sm leading-6 text-[#7b3f31]">
+          <div className="border border-[#efc5bc] bg-[#fff4f1] px-4 py-3 text-sm leading-6 text-[#7b3f31]">
             Run the updated SQL in <code>supabase/schema.sql</code> inside your Supabase SQL editor
             before saving period starts.
           </div>
@@ -112,25 +100,9 @@ export default async function DashboardPage() {
 
       <SurfaceCard className="space-y-4">
         <div className="space-y-1">
-          <h2 className="text-lg font-semibold tracking-tight text-ink">Recent body entries</h2>
-          <p className="text-sm leading-6 text-stone">
-            A short recent history gives you a practical view without turning this into a full data
-            dump.
-          </p>
-        </div>
-
-        <BodyEntryList
-          deleteAction={deleteBodyEntryAction}
-          entries={entries}
-          updateAction={updateBodyEntryAction}
-        />
-      </SurfaceCard>
-
-      <SurfaceCard className="space-y-4">
-        <div className="space-y-1">
           <h2 className="text-lg font-semibold tracking-tight text-ink">Cycle history</h2>
           <p className="text-sm leading-6 text-stone">
-            A first simple history view of recent period starts and the days between them.
+            Recent period starts and the days between them give Vela its first timing picture.
           </p>
         </div>
 
@@ -141,15 +113,6 @@ export default async function DashboardPage() {
           updateAction={updatePeriodEntryAction}
         />
       </SurfaceCard>
-
-      <div className="grid gap-4">
-        {dashboardCards.map((card) => (
-          <SurfaceCard key={card.title} className="space-y-2">
-            <h2 className="text-lg font-semibold tracking-tight text-ink">{card.title}</h2>
-            <p className="text-sm leading-6 text-stone">{card.body}</p>
-          </SurfaceCard>
-        ))}
-      </div>
     </div>
   );
 }

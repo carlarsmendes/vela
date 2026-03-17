@@ -1,4 +1,10 @@
-import type { BodyEntryRecord, CycleHistoryItem, PeriodEntryRecord, ProfileRecord } from "@/types";
+import type {
+  AppUserState,
+  BodyEntryRecord,
+  CycleHistoryItem,
+  PeriodEntryRecord,
+  ProfileRecord,
+} from "@/types";
 
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -14,6 +20,42 @@ export async function getCurrentUserContext() {
     user,
     error,
   };
+}
+
+export function isOnboardingComplete(profile: ProfileRecord | null) {
+  return Boolean(profile?.average_cycle_length && profile?.training_focus);
+}
+
+export async function getCurrentUserAppState(): Promise<AppUserState> {
+  const { user } = await getCurrentUserContext();
+
+  if (!user) {
+    return {
+      isAuthenticated: false,
+      isOnboardingComplete: false,
+      profile: null,
+      userEmail: null,
+      userId: null,
+    };
+  }
+
+  const { data: profile } = await getProfile(user.id);
+
+  return {
+    isAuthenticated: true,
+    isOnboardingComplete: isOnboardingComplete(profile),
+    profile,
+    userEmail: user.email ?? null,
+    userId: user.id,
+  };
+}
+
+export function getPostAuthPath(appState: AppUserState) {
+  if (!appState.isAuthenticated) {
+    return "/";
+  }
+
+  return appState.isOnboardingComplete ? "/dashboard" : "/onboarding";
 }
 
 export async function getProfile(userId: string) {
