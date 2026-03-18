@@ -39,6 +39,20 @@ alter table public.profiles enable row level security;
 alter table public.body_entries enable row level security;
 alter table public.period_entries enable row level security;
 
+drop policy if exists "Users can view their own profile" on public.profiles;
+drop policy if exists "Users can insert their own profile" on public.profiles;
+drop policy if exists "Users can update their own profile" on public.profiles;
+
+drop policy if exists "Users can view their own body entries" on public.body_entries;
+drop policy if exists "Users can insert their own body entries" on public.body_entries;
+drop policy if exists "Users can update their own body entries" on public.body_entries;
+drop policy if exists "Users can delete their own body entries" on public.body_entries;
+
+drop policy if exists "Users can view their own period entries" on public.period_entries;
+drop policy if exists "Users can insert their own period entries" on public.period_entries;
+drop policy if exists "Users can update their own period entries" on public.period_entries;
+drop policy if exists "Users can delete their own period entries" on public.period_entries;
+
 create policy "Users can view their own profile"
   on public.profiles
   for select
@@ -63,6 +77,16 @@ create policy "Users can insert their own body entries"
   on public.body_entries
   for insert
   with check (auth.uid() = user_id);
+
+create policy "Users can update their own body entries"
+  on public.body_entries
+  for update
+  using (auth.uid() = user_id);
+
+create policy "Users can delete their own body entries"
+  on public.body_entries
+  for delete
+  using (auth.uid() = user_id);
 
 create policy "Users can view their own period entries"
   on public.period_entries

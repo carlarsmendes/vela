@@ -161,7 +161,7 @@ export async function createBodyEntryAction(
     };
   }
 
-  revalidatePath("/dashboard");
+  revalidatePath("/metrics");
 
   return {
     status: "success",
@@ -253,7 +253,7 @@ export async function updateBodyEntryAction(
     };
   }
 
-  revalidatePath("/dashboard");
+  revalidatePath("/metrics");
 
   return {
     status: "success",
@@ -299,7 +299,7 @@ export async function deleteBodyEntryAction(
     };
   }
 
-  revalidatePath("/dashboard");
+  revalidatePath("/metrics");
 
   return {
     status: "success",
