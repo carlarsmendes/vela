@@ -4,6 +4,7 @@ import type {
   CycleHistoryItem,
   PeriodEntryRecord,
   ProfileRecord,
+  WeightTrendPoint,
 } from "@/types";
 
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -118,4 +119,38 @@ export function buildCycleHistory(entries: PeriodEntryRecord[]): CycleHistoryIte
       cycleLengthDays,
     };
   });
+}
+
+const sampleWeightTrend: WeightTrendPoint[] = [
+  { date: "2025-01-10", value: 67.8, isSample: true },
+  { date: "2025-01-18", value: 67.4, isSample: true },
+  { date: "2025-01-29", value: 67.1, isSample: true },
+  { date: "2025-02-09", value: 66.9, isSample: true },
+  { date: "2025-02-20", value: 66.7, isSample: true },
+  { date: "2025-03-03", value: 66.8, isSample: true },
+];
+
+export function buildWeightTrend(entries: BodyEntryRecord[]): {
+  points: WeightTrendPoint[];
+  isSample: boolean;
+} {
+  const points = [...entries]
+    .filter((entry) => entry.weight !== null)
+    .sort((left, right) => (left.date > right.date ? 1 : -1))
+    .map((entry) => ({
+      date: entry.date,
+      value: Number(entry.weight),
+    }));
+
+  if (points.length >= 2) {
+    return {
+      points,
+      isSample: false,
+    };
+  }
+
+  return {
+    points: sampleWeightTrend,
+    isSample: true,
+  };
 }

@@ -9,7 +9,8 @@ import { BodyEntryForm } from "@/components/body-entry-form";
 import { BodyEntryList } from "@/components/body-entry-list";
 import { PageHeader } from "@/components/page-header";
 import { SurfaceCard } from "@/components/surface-card";
-import { getCurrentUserAppState, getRecentBodyEntries } from "@/lib/supabase/data";
+import { WeightTrendChart } from "@/components/weight-trend-chart";
+import { buildWeightTrend, getCurrentUserAppState, getRecentBodyEntries } from "@/lib/supabase/data";
 
 export default async function MetricsPage() {
   const appState = await getCurrentUserAppState();
@@ -22,19 +23,48 @@ export default async function MetricsPage() {
     redirect("/onboarding");
   }
 
-  const { data: entries, error } = await getRecentBodyEntries(appState.userId as string);
+  const { data: entries, error } = await getRecentBodyEntries(appState.userId as string, 12);
   const setupIncomplete = error?.code === "42P01";
   const defaultDate = new Date().toISOString().slice(0, 10);
+  const weightTrend = buildWeightTrend(entries);
 
   return (
     <div className="space-y-6">
       <PageHeader
         eyebrow="Metrics"
         title="Body metrics"
-        description="Keep weight and body measurements together, with room for clearer trends as your history builds."
+        description="See trends first, then add new entries when you need to update the record."
       />
 
       <SurfaceCard className="space-y-4">
+        <div className="space-y-1">
+          <h2 className="text-lg font-semibold tracking-tight text-ink">Trends</h2>
+          <p className="text-sm leading-6 text-stone">
+            Start with weight, then add more trend views as your record builds.
+          </p>
+        </div>
+
+        <div className="space-y-3">
+          <WeightTrendChart isSample={weightTrend.isSample} points={weightTrend.points} />
+          <div className="border border-line bg-[#f7f3ee] px-4 py-5">
+            <p className="text-xs uppercase tracking-[0.16em] text-pine">Measurements trend</p>
+            <p className="mt-2 text-sm leading-6 text-stone">
+              Waist, hips, bust, thigh, arm, neck, and body fat trends will appear here.
+            </p>
+          </div>
+        </div>
+      </SurfaceCard>
+
+      <div className="flex justify-start">
+        <a
+          className="inline-flex items-center justify-center border border-moss bg-moss px-4 py-3 text-sm font-medium text-mist transition hover:bg-pine"
+          href="#log-new-entry"
+        >
+          Log new entry
+        </a>
+      </div>
+
+      <SurfaceCard className="space-y-4" id="log-new-entry">
         <div className="space-y-1">
           <h2 className="text-lg font-semibold tracking-tight text-ink">Log a new entry</h2>
           <p className="text-sm leading-6 text-stone">
@@ -49,30 +79,6 @@ export default async function MetricsPage() {
         ) : null}
 
         <BodyEntryForm action={createBodyEntryAction} defaultDate={defaultDate} />
-      </SurfaceCard>
-
-      <SurfaceCard className="space-y-4">
-        <div className="space-y-1">
-          <h2 className="text-lg font-semibold tracking-tight text-ink">Trends</h2>
-          <p className="text-sm leading-6 text-stone">
-            Trend views will live here once there is enough history to show something useful.
-          </p>
-        </div>
-
-        <div className="space-y-3">
-          <div className="border border-line bg-[#f7f3ee] px-4 py-5">
-            <p className="text-xs uppercase tracking-[0.16em] text-pine">Weight trend</p>
-            <p className="mt-2 text-sm leading-6 text-stone">
-              A simple view of how weight is moving over time will sit here.
-            </p>
-          </div>
-          <div className="border border-line bg-[#f7f3ee] px-4 py-5">
-            <p className="text-xs uppercase tracking-[0.16em] text-pine">Measurements trend</p>
-            <p className="mt-2 text-sm leading-6 text-stone">
-              Waist, hips, bust, thigh, arm, neck, and body fat trends will appear here.
-            </p>
-          </div>
-        </div>
       </SurfaceCard>
 
       <SurfaceCard className="space-y-4">

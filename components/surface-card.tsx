@@ -1,14 +1,14 @@
-import type { ReactNode } from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
-type SurfaceCardProps = {
+type SurfaceCardProps = ComponentPropsWithoutRef<"section"> & {
   children: ReactNode;
-  className?: string;
 };
 
-export function SurfaceCard({ children, className = "" }: SurfaceCardProps) {
+export function SurfaceCard({ children, className = "", ...props }: SurfaceCardProps) {
   return (
     <section
-      className={`rounded-xl border border-line/90 bg-[#f8f4ee] p-5 ${className}`.trim()}
+      {...props}
+      className={`rounded-lg border border-line/90 bg-bone/95 p-5 shadow-panel ${className}`.trim()}
     >
       {children}
     </section>

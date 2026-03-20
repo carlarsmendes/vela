@@ -100,3 +100,9 @@ export type CycleSummary = {
   trainingRecommendation: string;
   recommendationDetail: string;
 };
+
+export type WeightTrendPoint = {
+  date: string;
+  value: number;
+  isSample?: boolean;
+};

@@ -8,16 +8,20 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        sand: "#f7f1eb",
-        rosewater: "#efe6e1",
-        stone: "#645d58",
-        ink: "#1f1a17",
-        mist: "#fbf9f7",
-        line: "#e8ddd6",
-        pine: "#52635c",
+        sand: "#f5eee7",
+        bone: "#f8f3ed",
+        rosewater: "#ece2db",
+        stone: "#665f59",
+        ink: "#201c19",
+        mist: "#fcfaf7",
+        line: "#ddd1c7",
+        pine: "#54685a",
+        moss: "#3f5646",
+        clay: "#9e7765",
       },
       boxShadow: {
-        card: "0 18px 40px rgba(31, 26, 23, 0.08)",
+        card: "0 18px 40px rgba(32, 28, 25, 0.07)",
+        panel: "0 10px 24px rgba(63, 86, 70, 0.08)",
       },
       fontFamily: {
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
